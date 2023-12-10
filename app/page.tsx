@@ -5,6 +5,7 @@ import ConnectSupabaseSteps from '@/components/ConnectSupabaseSteps'
 import SignUpUserSteps from '@/components/SignUpUserSteps'
 import Header from '@/components/Header'
 import { cookies } from 'next/headers'
+import {redirect} from "next/navigation";
 
 export default async function Index() {
   const cookieStore = cookies()
@@ -35,7 +36,7 @@ export default async function Index() {
         <Header />
         <main className="flex-1 flex flex-col gap-6">
           <h2 className="font-bold text-4xl mb-4">Next steps</h2>
-          {isSupabaseConnected ? <SignUpUserSteps /> : <ConnectSupabaseSteps />}
+          {isSupabaseConnected ? redirect("notes") : <ConnectSupabaseSteps />}
         </main>
       </div>
 
