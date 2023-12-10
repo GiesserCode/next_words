@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@layer components {
+    .nav {
+        @apply w-screen h-[100px] flex justify-end items-center relative
+    }
+
+    .buttons {
+        @apply w-[120px] h-[40px] grid place-items-center rounded-xl
+    }
+}
