@@ -3,10 +3,14 @@
 @tailwind utilities;
 @layer components {
     .nav {
-        @apply w-screen h-[100px] flex justify-end items-center relative
+        @apply w-screen h-[100px] flex justify-end items-center relative z-30
     }
 
     .buttons {
-        @apply w-[120px] h-[40px] grid place-items-center rounded-xl
+        @apply w-[120px] h-[40px] grid place-items-center rounded-xl text-main
+    }
+
+    .border-hover {
+        @apply hover:border-opacity-100 border border-opacity-0 border-second transition duration-500 ease-in-out
     }
 }

@@ -6,4 +6,32 @@
     .background-gradient {
         @apply bg-gradient-to-br from-gblue to-ggreen
     }
+
+    .section {
+        @apply w-screen h-screen text-main
+    }
+
+    .center {
+        @apply grid place-items-center
+    }
+
+    .below {
+        @apply absolute top-0 w-screen h-screen text-center text-main
+    }
+
+    .learning {
+        @apply text-2xl rounded-2xl h-12 w-min px-10
+    }
+
+    .words {
+        @apply text-[8rem] leading-[140px]
+    }
+
+    .des {
+        @apply text-xl text-second
+    }
+
+    .background {
+        @apply absolute inset-x-0 -z-10 transform-gpu overflow-hidden blur-big w-12 h-40 bg-red-500
+    }
 }
