@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .input {
+        @apply bg-darkBackground rounded-xl focus:outline-none border border-second placeholder-second focus:placeholder-main h-12 p-2 focus:border-main mb-4 autofill:bg-none
+    }
+
+    .button {
+        @apply w-full h-10 rounded-xl outline-0 border-0 focus:outline-none focus:border-2 focus:border-second
+    }
+}

@@ -20,7 +20,8 @@ export default async function AuthButton(props: any) {
         //return redirect("/login");
     };
 
-    return user ? (<div className={"nav"}>
+    return user ? (
+        <div className={"nav"}>
             <form action={signOut}>
                 <button className={"buttons mr-[10px] border-hover"}>Sign Out</button>
             </form>

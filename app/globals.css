@@ -8,7 +8,7 @@
     }
 
     .section {
-        @apply w-screen h-screen text-main
+        @apply w-screen h-screen text-main selection:bg-gblue selection:text-main
     }
 
     .center {
@@ -32,6 +32,10 @@
     }
 
     .background {
-        @apply absolute inset-x-0 -z-10 transform-gpu overflow-hidden blur-big w-12 h-40 bg-red-500
+        @apply absolute inset-x-0 -z-10 transform-gpu overflow-hidden w-[327px] h-[144px] blur-big opacity-50
+    }
+
+    .backgroundBlur {
+        @apply absolute blur-big opacity-[20%]
     }
 }

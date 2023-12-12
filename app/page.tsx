@@ -2,7 +2,6 @@ import AuthButton from "@/components/AuthButton";
 
 export default async function Index() {
     return (<section className={"section"}>
-            <div className={"background bottom-0"}></div>
             <AuthButton/>
             <section className={"below center"}>
                 <div>
