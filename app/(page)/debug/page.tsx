@@ -1,23 +1,22 @@
 import {createClient} from "@/utils/supabase/server";
 import {cookies} from "next/headers";
-import Input from "./Input";
+import Input from "../../ui/dashboard/Input";
 import {redirect} from "next/navigation";
 
 export default async function Notes() {
     const cookieStore = cookies();
     const supabase = createClient(cookieStore);
-    const {data: accounts, error} = await supabase.from("accounts").select("");
-
     const {
         data: {user},
     } = await supabase.auth.getUser();
+    const {data: accounts, error} = await supabase.from("accounts").select("*").eq("id", user?.id);
 
     if (error) {
         return <div>Error fetching accounts: {error.message}</div>;
     }
 
     return user ? (
-        <div>
+        <div className={"w-full h-full grid place-items-center"}>
             {accounts.map((note: any, index: number) => (
                 <div
                     key={note}
@@ -45,7 +44,7 @@ export default async function Notes() {
                     ))}
                 </div>
             ))}
-            <Input/>
+            <Input user={user}/>
         </div>
     ) : redirect("/")
 }

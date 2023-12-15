@@ -10,6 +10,8 @@ module.exports = {
                 gblue: "#33817C",
                 ggreen: "#3B8547",
                 darkBackground: "#0B0B0B",
+                transBackground: "#444",
+                lightBackground: "#777",
                 main: "#ddd",
                 second: "#aaa"
             },

@@ -25,7 +25,7 @@ export default async function AuthButton(props: any) {
             <form action={signOut}>
                 <button className={"buttons mr-[10px] border-hover"}>Sign Out</button>
             </form>
-            <Link href="/notes" className="buttons w-[200px] mr-[30px] background-gradient">
+            <Link href="/dashboard" className="buttons w-[200px] mr-[30px] background-gradient">
                 Go to your Words
             </Link>
         </div>

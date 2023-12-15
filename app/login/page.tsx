@@ -26,7 +26,7 @@ export default function Login({
             //idk what to do
         }
 
-        return redirect("/notes");
+        return redirect("/dashboard");
     };
 
     return (
