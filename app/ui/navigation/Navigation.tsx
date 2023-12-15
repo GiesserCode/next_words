@@ -13,8 +13,9 @@ const Navigation = () => {
                     <Link
                         className={`w-full relative bg-transparent rounded-xl h-12 text-xl grid place-items-center ${pathname === item.link ? "background-gradient text-main" : "border border-second text-second"}`}
                         href={item.link} key={index}>
-                        <div
-                            className={`absolute left-2 color-${pathname === item.link ? "main" : "second"}`}>{item.icon}</div>
+                        <div className={`absolute left-2 text-${pathname === item.link ? "main" : "second"}`}>
+                            {pathname === item.link ? item.lightIcon : item.icon}
+                        </div>
                         {item.name}
                     </Link>
                 ))}

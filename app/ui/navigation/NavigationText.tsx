@@ -4,21 +4,25 @@ export const buttons = [
     {
         name: "Dashboard",
         link: "/dashboard",
-        icon: <DashboardSVG/>
+        icon: <DashboardSVG color={"#AAAAAA"}/>,
+        lightIcon: <DashboardSVG color={"#FFFFFF"} />
     },
     {
         name: "Profile",
         link: "/profile",
-        icon: <ProfileSVG/>
+        icon: <ProfileSVG color={"#AAAAAA"}/>,
+        lightIcon: <ProfileSVG color={"#FFFFFF"} />
     },
     {
         name: "Create",
         link: "/create",
-        icon: <CreateSVG/>
+        icon: <CreateSVG color={"#AAAAAA"}/>,
+        lightIcon: <CreateSVG color={"#FFFFFF"} />
     },
     {
         name: "Learn",
         link: "/learn",
-        icon: <LearnSVG/>
+        icon: <LearnSVG color={"#AAAAAA"}/>,
+        lightIcon: <LearnSVG color={"#FFFFFF"} />
     }
 ]

@@ -2,6 +2,7 @@ import Info from "@/app/ui/dashboard/Info";
 import Wordsets from "@/app/ui/dashboard/Wordsets";
 import {PlusSVG} from "@/components/SVGs";
 import Scoreboard from "@/app/ui/dashboard/Scoreboard";
+import Progress from "@/app/ui/dashboard/Progress";
 
 const Dashboard = () => {
     return <div className={"py-3 w-[calc(100vw - 250px)]"}>
@@ -13,8 +14,9 @@ const Dashboard = () => {
         </div>
         <Wordsets/>
         <h2 className={"pl-10 text-4xl mb-5"}>Stats</h2>
-        <div>
+        <div className={"flex w-full"}>
             <Scoreboard/>
+            <Progress />
         </div>
     </div>
 }
