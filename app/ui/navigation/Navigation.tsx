@@ -11,7 +11,7 @@ const Navigation = () => {
             <div className={"flex flex-col gap-5"}>
                 {buttons.map((item, index) => (
                     <Link
-                        className={`w-full relative bg-transparent rounded-xl h-12 text-xl grid place-items-center ${pathname === item.link ? "background-gradient text-main" : "border border-second text-second"}`}
+                        className={`w-full relative bg-transparent rounded-xl h-12 text-xl grid place-items-center outline-0 focus:outline-none focus:border-main ${pathname === item.link ? "background-gradient text-main" : "border border-second text-second"}`}
                         href={item.link} key={index}>
                         <div className={`absolute left-2 text-${pathname === item.link ? "main" : "second"}`}>
                             {pathname === item.link ? item.lightIcon : item.icon}

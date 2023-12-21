@@ -85,9 +85,21 @@ export const PlusSVG = () => {
 
 export const ProfileIconSVG = () => {
     return <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M22.2444 25.8824C21.8171 24.5534 20.8755 23.3791 19.5657 22.5415C18.2559 21.704 16.651 21.25 15 21.25C13.349 21.25 11.7441 21.704 10.4343 22.5415C9.12446 23.3791 8.18287 24.5534 7.75556 25.8824" stroke="#AAAAAA" strokeWidth="2"/>
+        <path
+            d="M22.2444 25.8824C21.8171 24.5534 20.8755 23.3791 19.5657 22.5415C18.2559 21.704 16.651 21.25 15 21.25C13.349 21.25 11.7441 21.704 10.4343 22.5415C9.12446 23.3791 8.18287 24.5534 7.75556 25.8824"
+            stroke="#AAAAAA" strokeWidth="2"/>
         <circle cx="15" cy="12.5" r="3.75" stroke="#AAAAAA" strokeWidth="2" strokeLinecap="round"/>
         <rect x="3.5" y="3.5" width="23" height="23" rx="3" stroke="#AAAAAA" strokeWidth="2"/>
+    </svg>
+
+}
+
+export const BigUserSVG = () => {
+    return <svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path
+            d="M82.1976 85.1962C80.2984 79.8804 76.1136 75.1831 70.2921 71.8328C64.4707 68.4826 57.3379 66.6667 50.0001 66.6667C42.6623 66.6667 35.5295 68.4826 29.708 71.8328C23.8866 75.183 19.7017 79.8803 17.8026 85.1962"
+            stroke="#AAAAAA" strokeWidth="2" strokeLinecap="round"/>
+        <circle cx="49.9999" cy="33.3333" r="16.6667" stroke="#AAAAAA" strokeWidth="2" strokeLinecap="round"/>
     </svg>
 
 }
