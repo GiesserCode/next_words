@@ -2,14 +2,10 @@
 import {cookies} from "next/headers";
 import {createClient} from "@/utils/supabase/server";
 import {DayStreakSVG, LearnsetsSVG, MadeSVG} from "@/components/SVGs";
+import {getUser, getUserData} from "@/app/ui/actions";
 
 const Info = async () => {
-    const cookieStore = cookies();
-    const supabase = createClient(cookieStore);
-    const {
-        data: {user},
-    } = await supabase.auth.getUser();
-    const {data: accounts, error} = await supabase.from("accounts").select("*").eq("id", user?.id);
+    const accounts = await getUserData()
     return <div className={"w-full flex justify-between px-10 mb-3 flex-wrap"}>
         <div className={"w-[300px] bg-opacity-40 bg-transBackground rounded-3xl flex flex-col items-center mb-5"}>
             <div className={"h-[44px] flex items-center"}>

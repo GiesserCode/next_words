@@ -1,31 +1,15 @@
-import {cookies} from "next/headers";
-import {createClient} from "@/utils/supabase/server";
+'use server'
 import {PenSVG} from "@/components/SVGs";
+import {getUserData, getWordsetsData} from "@/app/ui/actions";
+import Link from "next/link";
 
 const Wordsets = async () => {
-    const cookieStore = cookies();
-    const supabase = createClient(cookieStore);
-    const {
-        data: {user},
-    } = await supabase.auth.getUser();
-    const {data: accounts, error} = await supabase
-        .from("accounts")
-        .select("wordsets_user")
-        .eq("id", user?.id);
+    const accounts = await getUserData()
+    const wordsdata = await getWordsetsData(accounts)
 
-    const wordsdata = await Promise.all(
-        accounts![0].wordsets_user.map(async (item: any) => {
-            const {data: wordsets, error} = await supabase
-                .from("wordsets")
-                .select("*")
-                .eq("id", item.id);
-            return wordsets;
-        })
-    );
-
-    return <div className={"w-full flex px-10 mb-8"}>
+    return <div className={"w-full flex px-10 mb-8 cursor-pointer"}>
         {wordsdata.map((item, index) => (
-            <div key={index} className={"h-[120px] bg-transBackground bg-opacity-40 rounded-2xl p-[10px] mr-5"}>
+            <Link href={`/learn?query=${item[0].id}`} key={index} className={"h-[120px] bg-transBackground bg-opacity-40 rounded-2xl p-[10px] mr-5"}>
                 <div className={"w-full h-full"}>
                     <div className={"h-[40px] mb-[10px] flex justify-between text-second text-lg"}>
                         <PenSVG/>
@@ -36,7 +20,7 @@ const Wordsets = async () => {
                         {item[0].title}
                     </div>
                 </div>
-            </div>
+            </Link>
 
         ))}
     </div>

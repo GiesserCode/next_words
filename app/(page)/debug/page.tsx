@@ -2,22 +2,15 @@ import {createClient} from "@/utils/supabase/server";
 import {cookies} from "next/headers";
 import Input from "../../ui/dashboard/Input";
 import {redirect} from "next/navigation";
+import {getUser, getUserData} from "@/app/ui/actions";
 
 export default async function Notes() {
-    const cookieStore = cookies();
-    const supabase = createClient(cookieStore);
-    const {
-        data: {user},
-    } = await supabase.auth.getUser();
-    const {data: accounts, error} = await supabase.from("accounts").select("*").eq("id", user?.id);
-
-    if (error) {
-        return <div>Error fetching accounts: {error.message}</div>;
-    }
+    const user = await getUser()
+    const accounts = await getUserData()
 
     return user ? (
         <div className={"w-full h-full grid place-items-center"}>
-            {accounts.map((note: any, index: number) => (
+            {accounts!.map((note: any, index: number) => (
                 <div
                     key={note}
                     className={

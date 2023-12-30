@@ -1,19 +1,9 @@
-import {cookies} from "next/headers";
-import {createClient} from "@/utils/supabase/server";
+'use server'
+import {getUser, getUserData} from "@/app/ui/actions";
 
 const Stats = async () => {
-    const cookieStore = cookies();
-    const supabase = createClient(cookieStore);
-    const {
-        data: {user},
-    } = await supabase.auth.getUser();
-    const {data: accounts, error} = await supabase
-
-        .from('accounts')
-
-        .select('*')
-
-        .order('score', {ascending: false});
+    const user = await getUser()
+    const accounts = await getUserData()
     return <div className={"w-min"}>
         {accounts?.map((item, index) => {
             if (item.id === user?.id) {

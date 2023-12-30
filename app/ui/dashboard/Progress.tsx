@@ -18,7 +18,6 @@ const Progress = async () => {
             <div className={"w-full h-full"}>
                 <h3 className={"text-2xl mb-2"}>Progress</h3>
                 <div className={"w-full h-full bg-lightBackground bg-opacity-40 p-2 rounded-xl"}>
-
                     </div>
             </div>
         </div>

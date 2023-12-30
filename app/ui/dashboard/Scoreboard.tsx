@@ -1,20 +1,12 @@
+'use server'
 import {cookies} from "next/headers";
 import {createClient} from "@/utils/supabase/server";
 import {ProfileIconSVG} from "@/components/SVGs";
+import {getScoreboardData, getUser} from "@/app/ui/actions";
 
 const Scoreboard = async () => {
-    const cookieStore = cookies();
-    const supabase = createClient(cookieStore);
-    const {
-        data: {user},
-    } = await supabase.auth.getUser();
-    const {data: accounts, error} = await supabase
-
-        .from('accounts')
-
-        .select('*')
-
-        .order('score', {ascending: false});
+    const user = await getUser()
+    const accounts = await getScoreboardData()
     return <div className={"w-[40%] px-10"}>
         <div className={"w-full bg-transBackground bg-opacity-40 rounded-2xl px-5 py-2"}>
             <div className={"w-full h-full"}>

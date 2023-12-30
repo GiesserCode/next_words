@@ -3,8 +3,9 @@ import {cookies} from "next/headers";
 import {createClient} from "@/utils/supabase/server";
 import {redirect} from "next/navigation";
 import "@/components/login.css"
+import {setUser} from "@/app/ui/actions";
 
-export default function Login({
+export default async function Login({
                                   searchParams,
                               }: {
     searchParams: { message: string };
@@ -25,6 +26,9 @@ export default function Login({
         if (error) {
             //idk what to do
         }
+
+        const { data: { user } } = await supabase.auth.getUser();
+        await setUser(user)
 
         return redirect("/dashboard");
     };

@@ -3,6 +3,8 @@ import Navigation from "../ui/navigation/Navigation"
 import {cookies} from "next/headers";
 import {createClient} from "@/utils/supabase/server";
 import {defaultAccounts} from "@/app/ui/default";
+import {redirect} from "next/navigation";
+import {checkWordsOfUserUpToDate} from "@/app/ui/actions";
 
 export default async function DashboardLayout({
                                                   children, // will be a page or nested layout
@@ -25,13 +27,14 @@ export default async function DashboardLayout({
         const wordsets_user = defaultAccounts.wordsets_user
         const {data, error} = await supabase.from("accounts").insert([{id, name, score, progress, day_streak, wordsets_user}]);
     }
+    await checkWordsOfUserUpToDate()
 
-    return (
-        <section className={"flex"}>
+    return user ? (
+        <section className={"flex selection:bg-lightBackground"}>
             {/* Include shared UI here e.g. a header or sidebar */}
             <Navigation/>
 
             <section className={"w-full h-full"}>{children}</section>
         </section>
-    )
+    ) : redirect("/login")
 }
