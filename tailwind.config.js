@@ -17,7 +17,14 @@ module.exports = {
             },
             blur: {
                 big: "500px"
-            }
+            },
+            keyframes: {
+                shimmer: {
+                    '100%': {
+                        transform: 'translateX(100%)',
+                    },
+                },
+            },
         },
     },
     plugins: [],

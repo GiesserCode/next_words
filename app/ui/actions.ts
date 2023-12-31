@@ -4,6 +4,7 @@ import {createClient} from "@/utils/supabase/server";
 import {z} from 'zod';
 import {unstable_noStore as noStore} from 'next/cache';
 import {redirect} from "next/navigation";
+import * as puppeteer from 'puppeteer';
 
 const cookieStore = cookies();
 const supabase = createClient(cookieStore);
@@ -27,7 +28,11 @@ export async function getUserData() {
     noStore()
     const user = await getUser()
     const {data: accounts, error} = await supabase.from("accounts").select("*").eq("id", user?.id);
-    return accounts
+    if (accounts){
+        return accounts
+    } else {
+        redirect("/login")
+    }
 }
 
 export const generateUUID = () => {
@@ -355,14 +360,23 @@ export async function checkWordsOfUserUpToDate(){
 
             // Create a new array by combining the existing words with added items
             const updatedWords = [...wordset.words, ...addedItems];
- 
+
             // Remove deleted items from the updatedWords array
             const newWorsetDeletedwords = updatedWords.filter((userItem: any) => !deletedItems.some((deletedItem: any) => deletedItem.id === userItem.id));
 
-            return { id: wordset.id, words: newWorsetDeletedwords };
+            // Transform the word objects to the desired format
+            const transformedWords = newWorsetDeletedwords.map((word: any) => ({
+                id: word.id,
+                done: false,
+                star: false,
+                wrong: 0,
+            }));
+
+            return { id: wordset.id, words: transformedWords };
         }));
 
-            const {data: account, error} = await supabase
+
+        const {data: account, error} = await supabase
                 .from("accounts")
                 .update({wordsets_user: newUserWordsets})
                 .eq("id", accounts![0].id)
@@ -371,4 +385,33 @@ export async function checkWordsOfUserUpToDate(){
             }
 
     }
+}
+
+export async  function getQuizlet(quizlet: string){
+    /*console.log("test")
+
+    const res = await fetch(quizlet)
+    const html = await res.text()
+
+    const dom = new JSDOM(html)
+    const document = dom.window.document
+    const french = document.querySelector('body')?.textContent
+    console.log(french)*/
+    const browser = await puppeteer.launch({ headless: "new" });
+    const page = await browser.newPage();
+    await page.setJavaScriptEnabled(true);
+
+    await page.goto(quizlet, { waitUntil: 'domcontentloaded' });
+
+    // Add some delay if the content is loaded asynchronously
+    await page.waitForTimeout(2000);
+
+    const frenchContent = await page.evaluate(() => {
+        // Your logic to extract content goes here
+        return document.querySelector('body')?.textContent;
+    });
+
+    console.log(frenchContent);
+
+    await browser.close();
 }

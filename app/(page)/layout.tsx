@@ -4,7 +4,8 @@ import {cookies} from "next/headers";
 import {createClient} from "@/utils/supabase/server";
 import {defaultAccounts} from "@/app/ui/default";
 import {redirect} from "next/navigation";
-import {checkWordsOfUserUpToDate} from "@/app/ui/actions";
+import {checkWordsOfUserUpToDate, getUserData} from "@/app/ui/actions";
+import {isBefore, parseISO} from 'date-fns';
 
 export default async function DashboardLayout({
                                                   children, // will be a page or nested layout
@@ -28,6 +29,30 @@ export default async function DashboardLayout({
         const {data, error} = await supabase.from("accounts").insert([{id, name, score, progress, day_streak, wordsets_user}]);
     }
     await checkWordsOfUserUpToDate()
+    const account = await getUserData()
+    let savedDates = account![0].day_streak
+    await updateDayStreak()
+
+    async function updateDayStreak() {
+        const lastOnline = parseISO(savedDates[1]);
+        const today: any = new Date();
+
+        if (isBefore(lastOnline, today)) {
+            // Update last online to today
+            savedDates[1] = today.toISOString();
+
+            // Increment day streak
+            const streakStartDate: any = parseISO(savedDates[0]);
+            const dayStreak = Math.floor((today - streakStartDate) / (24 * 60 * 60 * 1000));
+        } else {
+            // Reset streak
+            savedDates[0] = today.toISOString();
+            savedDates[1] = today.toISOString();
+
+            console.log("Day streak reset.");
+        }
+        const {data: accounts, error} = await supabase.from("accounts").update({day_streak: savedDates}).eq("id", user?.id)
+    }
 
     return user ? (
         <section className={"flex selection:bg-lightBackground"}>

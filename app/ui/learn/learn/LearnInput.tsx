@@ -10,6 +10,9 @@ const LearnInput = ({userWordset, officialWordset}: any) => {
     const [currentWord, setCurrentWord] = useState({"id":"f5a94aa4-7f07-4a2d-94a1-8f6f2e9de85a","word":"city","definition":"ville"})
     const [visible, setVisible] = useState(false)
 
+    console.log(currentUserWordset)
+    console.log(currentOfficialWordset)
+
     const getNewWord = () => {
         setVisible(false)
         console.log("getnewword")

@@ -1,5 +1,5 @@
 import {getUserData, getWordsetbyId, getWordsetsData} from "@/app/ui/actions";
-import LearnInput from "@/app/ui/learn/learn/LearnInput";
+import WriteInput from "@/app/ui/learn/learn/WriteInput";
 
 const Learnlearn = async ({searchParams,}: { searchParams?: { query?: string; }; }) => {
     const accounts = await getUserData()
@@ -9,7 +9,7 @@ const Learnlearn = async ({searchParams,}: { searchParams?: { query?: string; };
     const userWordset = accounts![0].wordsets_user.find((item: any) => item.id === wordsetData[0].id);
 
     return <section className={"w-full h-screen grid place-items-center"}>
-        <LearnInput userWordset={userWordset} officialWordset={wordsetData} />
+        <WriteInput userWordset={userWordset.words} officialWordset={wordsetData[0].words} />
     </section>
 }
 
