@@ -1,5 +1,6 @@
-import { createServerClient, type CookieOptions } from '@supabase/ssr'
-import { cookies } from 'next/headers'
+'use server'
+import {type CookieOptions, createServerClient} from '@supabase/ssr'
+import {cookies} from 'next/headers'
 
 export const createClient = (cookieStore: ReturnType<typeof cookies>) => {
   //console.log(cookieStore); // Add this line to log the cookieStore parameter

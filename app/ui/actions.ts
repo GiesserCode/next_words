@@ -358,13 +358,10 @@ export async function checkWordsOfUserUpToDate(){
             const addedItems = madeWordset![0].words.filter((officialItem: any) => !wordset.words.some((userItem: any) => userItem.id === officialItem.id));
             const deletedItems = wordset.words.filter((userItem: any) => !madeWordset![0].words.some((officialItem: any) => officialItem.id === userItem.id));
 
-            // Create a new array by combining the existing words with added items
             const updatedWords = [...wordset.words, ...addedItems];
 
-            // Remove deleted items from the updatedWords array
             const newWorsetDeletedwords = updatedWords.filter((userItem: any) => !deletedItems.some((deletedItem: any) => deletedItem.id === userItem.id));
-
-            // Transform the word objects to the desired format
+            
             const transformedWords = newWorsetDeletedwords.map((word: any) => ({
                 id: word.id,
                 done: false,

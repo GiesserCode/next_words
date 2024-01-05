@@ -1,6 +1,6 @@
 'use client'
 
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 const WriteInput = ({userWordset, officialWordset}: any) => {
     const [currentUserWordset, setCurrentUserWordset] = useState(userWordset)
@@ -9,6 +9,24 @@ const WriteInput = ({userWordset, officialWordset}: any) => {
     const [visible, setVisible] = useState(false)
     const [correct, setCorrect] = useState(false)
     const [perfect, setPerfect] = useState(false)
+
+    useEffect(() => {
+        const initNewWord = () => {
+            setCurrentWord(
+                () => {
+                    const notStartedWords = currentUserWordset.filter((item: any) => {
+                        return item.done === false && item.wrong === 0 && item.id !== currentWord.id && item
+                    });
+                    const randomIndexStart = Math.floor(Math.random() * notStartedWords.length)
+                    const newWord = currentOfficialWordset?.find((item: any) => {
+                        return item.id === notStartedWords[randomIndexStart]?.id;
+                    });
+                    return newWord
+                }
+            )
+        }
+        initNewWord()
+    }, []);
 
     const getNewWord = (event: any) => {
         event.preventDefault();
@@ -66,21 +84,14 @@ const WriteInput = ({userWordset, officialWordset}: any) => {
                     });
                     console.log("3: " + notStartedWords[randomIndexStart])
                 } else {
-                    if (notDoneWrongWords.length > 1){
-                        console.log("new wrong word");
-                        newWord = currentOfficialWordset?.find((item: any) => {
-                            return item.id === notDoneWrongWords[randomIndexDone]?.id;
-                        });
-                        console.log("4: " + notDoneWrongWords[randomIndexDone])
-                    } else {
-                        newWord = currentUserWordset.filter((item: any) => {
-                            return item.done === false && item.wrong > 0 && item
-                        });
-                        console.log("4 last: " + notDoneWrongWords[randomIndexDone])
-                    }
+                 console.log("new wrong word");
+                 newWord = currentOfficialWordset?.find((item: any) => {
+                     return item.id === notDoneWrongWords[randomIndexDone]?.id;
+                 });
+                 console.log("4: " + notDoneWrongWords[randomIndexDone])
                 }
             }
-            return newWord ? newWord : {id:"f5a94aa4-7f07-4a2d-94a1-8f6f2e9de85a",word:"city",definition:"Every word done"}
+            return newWord ? newWord : {id:"f5a94aa4-7f07-4a2d-94a1-8f6f2e9de85a",word:"",definition:"Every word done"}
         });
         event.target.elements.wordInput.value = "";
         setPerfect(false)
@@ -169,21 +180,13 @@ const WriteInput = ({userWordset, officialWordset}: any) => {
             <input type={"submit"} value={"I don't know"} />
         </div>
         <div className={"flex justify-between gap-5 text-xl text-main"}>
-            <input name={"wordInput"} type={"text"} placeholder={"Enter a Word"} autoComplete={"off"} className={`min-w-[500px] w-full outline-0 focus:outline-none border-0 focus:border-none bg-opacity-40 rounded-xl h-[40px] p-4 placeholder-second ${perfect ? "background-gradient" :  "bg-lightBackground"}`} />
+            <input name={"wordInput"} type={"text"} placeholder={"Enter a Word"} autoComplete={"off"} className={`min-w-[500px] w-full outline-0 focus:outline-none border-0 focus:border-none bg-opacity-40 rounded-xl h-[40px] p-4 placeholder-second ${perfect ? "background-gradient" :  "bg-lightBackground"} ${visible ? correct ? "bg-green-500" : "bg-red-500" : "bg-lightBackground"}`} />
             <input type={"submit"} value={"Check"} />
         </div>
         <div className={`${visible ? "visible" : "hidden"} ${correct ? "text-green-500" : "text-red-500"}`}>
             {currentWord.word}
         </div>
-        <div>
-            {currentUserWordset.map((item: any, index: any) => (
-                <div key={index} className={`${item.done ? "text-green-500" : item.wrong === 0 ? "text-blue-500" : "text-red-500"}`}>
-                    {JSON.stringify(currentOfficialWordset.find((word: any) => {
-                        return word.id === item.id && item
-                    })) + JSON.stringify(item)}
-                </div>
-            ))}
-        </div>
+        
     </form>
 }
 
