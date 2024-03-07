@@ -1,4 +1,4 @@
-export const defaultAccounts = {
+ export const defaultAccounts = {
     name: "new User",
     score: 0,
     progress: [0, 0, 0, 0, 0],

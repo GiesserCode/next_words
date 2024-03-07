@@ -2,13 +2,50 @@
 
 import {useEffect, useState} from "react";
 
-const WriteInput = ({userWordset, officialWordset}: any) => {
+const WriteInput = ({userWordset, officialWordset, id}: any) => {
+
     const [currentUserWordset, setCurrentUserWordset] = useState(userWordset)
+
+    useEffect(() => {
+        const storedData = localStorage.getItem(id);
+
+        if (!storedData) {
+            localStorage.setItem(id, JSON.stringify(userWordset));
+        } else {
+            const parsedData = JSON.parse(storedData);
+            console.log(parsedData)
+
+            const filteredParsedData = parsedData.filter(({ id }: any) => userWordset.some((item: any) => item.id === id));
+
+            const idsToAdd = userWordset.filter(({ id }: any) => !parsedData.some((item: any) => item.id === id));
+
+            const updatedParsedData = filteredParsedData.map(({ id, ...rest }: any) => ({
+                id,
+                ...parsedData.find((item: any) => item.id === id),
+                ...rest,
+            }));
+
+            const finalParsedData = updatedParsedData.concat(idsToAdd);
+            setCurrentUserWordset(finalParsedData)
+            console.log(finalParsedData);
+            console.log(officialWordset)// Log the updated data
+            localStorage.setItem(id, JSON.stringify(finalParsedData))
+
+            const countFalseAndWrong = currentUserWordset.filter((item: any) => !item.done && item.wrong > 0).length;
+            const countDoneTrue = currentUserWordset.filter((item: any) => item.done).length;
+            setCountWrong(countFalseAndWrong)
+            setCountDoneTrue(countDoneTrue)
+        }
+    }, []);
+
+
     const [currentOfficialWordset, setCurrentOfficialWordset] = useState(officialWordset)
-    const [currentWord, setCurrentWord] = useState({"id":"f5a94aa4-7f07-4a2d-94a1-8f6f2e9de85a","word":"city","definition":"ville"})
+    const [currentWord, setCurrentWord] = useState({"id":"f5a94aa4-7f07-4a2d-94a1-8f6f2e9de85a","word":"","definition":""})
     const [visible, setVisible] = useState(false)
     const [correct, setCorrect] = useState(false)
     const [perfect, setPerfect] = useState(false)
+    const [countWrong, setCountWrong] = useState(0)
+    const [countDoneTrue, setCountDoneTrue] = useState(0)
 
     useEffect(() => {
         const initNewWord = () => {
@@ -39,6 +76,9 @@ const WriteInput = ({userWordset, officialWordset}: any) => {
             const notDoneWrongWords = currentUserWordset.filter((item: any) => {
                 return item.done === false && item.wrong > 0 && item.id !== currentWord.id && item
             });
+            const starWords = currentUserWordset.filter((item: any) => {
+                return item.star === true && item.id !== currentWord.id && item
+            });
             const notStartedWords = currentUserWordset.filter((item: any) => {
                 return item.done === false && item.wrong === 0 && item.id !== currentWord.id && item
             });
@@ -48,7 +88,7 @@ const WriteInput = ({userWordset, officialWordset}: any) => {
             console.log("notStartedWords length: " + notStartedWords.length)
             const randomIndexStart = Math.floor(Math.random() * notStartedWords.length)
             const randomIndexDone = Math.floor(Math.random() * notDoneWrongWords.length)
-            const multiplikator = 1 / 5;
+            const multiplikator = 1 / 20;
             const provability =
                 Math.random() <
                 (notDoneWrongWords.length > 0
@@ -88,35 +128,45 @@ const WriteInput = ({userWordset, officialWordset}: any) => {
                  newWord = currentOfficialWordset?.find((item: any) => {
                      return item.id === notDoneWrongWords[randomIndexDone]?.id;
                  });
+                 console.log(newWord)
+                 if(newWord === undefined){
+                     newWord = starWords?.find((item: any) => {
+                         return item.id === starWords[randomIndexDone]?.id
+                     })
+                     console.log(starWords)
+                 }
                  console.log("4: " + notDoneWrongWords[randomIndexDone])
                 }
             }
-            return newWord ? newWord : {id:"f5a94aa4-7f07-4a2d-94a1-8f6f2e9de85a",word:"",definition:"Every word done"}
+            return newWord ? newWord : {id:"f5a94aa4-7f07-4a2d-94a1-8f6f2e9de85a",word:"Every word done",definition:"Every word done"}
         });
         event.target.elements.wordInput.value = "";
         setPerfect(false)
+        localStorage.setItem(id, JSON.stringify(currentUserWordset))
+        const countFalseAndWrong = currentUserWordset.filter((item: any) => !item.done && item.wrong > 0).length;
+        const countDoneTrue = currentUserWordset.filter((item: any) => item.done).length;
+        const lenght = currentUserWordset.length
+        setCountWrong(countFalseAndWrong > 0 ? countFalseAndWrong * 100 / lenght : countFalseAndWrong)
+        setCountDoneTrue(countDoneTrue > 0 ? countDoneTrue * 100 / lenght : countDoneTrue)
     };
 
     const isAnswerCloseEnough = (word: any, input: any) => {
         const maxLengthDifference = 1;
         const minLengthDifference = 1;
 
-        if (Math.abs(word.length - input.length) > maxLengthDifference) {
+        const removeIgnoredCharacters = (str: any) => str.replace(/[\(\)\/]/g, '');
+
+        const cleanWord = removeIgnoredCharacters(word);
+        const cleanInput = removeIgnoredCharacters(input);
+
+        if (Math.abs(cleanWord.length - cleanInput.length) > maxLengthDifference) {
             return false;
         }
 
-        const wordArray = word.split("");
-        const inputArray = input.split("");
-
         let differences = 0;
 
-        for (let i = 0; i < Math.min(wordArray.length, inputArray.length); i++) {
-            // Ignore characters within parentheses
-            if (wordArray[i] === "(" || wordArray[i] === ")") {
-                continue;
-            }
-
-            if (wordArray[i] !== inputArray[i]) {
+        for (let i = 0; i < Math.min(cleanWord.length, cleanInput.length); i++) {
+            if (cleanWord[i] !== cleanInput[i]) {
                 differences++;
             }
 
@@ -127,9 +177,10 @@ const WriteInput = ({userWordset, officialWordset}: any) => {
 
         return (
             differences <= maxLengthDifference &&
-            word.length - input.length <= minLengthDifference
+            cleanWord.length - cleanInput.length <= minLengthDifference
         );
-    }
+    };
+
 
     const checkWord = (event: any) => {
 
@@ -151,7 +202,7 @@ const WriteInput = ({userWordset, officialWordset}: any) => {
             console.log("true")
         } else {
             const updatedUserWordset = currentUserWordset.map((word: any) =>
-                word.id === currentWord.id ? { ...word, wrong: word.wrong + 1 } : word
+                word.id === currentWord.id ? { ...word, star: true,  done: false, wrong: word.wrong + 1 } : word
             );
             setCurrentUserWordset(updatedUserWordset)
             setCorrect(false)
@@ -186,7 +237,10 @@ const WriteInput = ({userWordset, officialWordset}: any) => {
         <div className={`${visible ? "visible" : "hidden"} ${correct ? "text-green-500" : "text-red-500"}`}>
             {currentWord.word}
         </div>
-        
+        <div className={`w-full relative flex rounded-xl h-2 bg-zinc-600`}>
+            <div className={`h-full bg-red-600 bg-opacity-80`} style={{width: countWrong + "%"}}></div>
+            <div className={`h-full bg-green-600 bg-opacity-80`} style={{width: countDoneTrue + "%"}}></div>
+        </div>
     </form>
 }
 

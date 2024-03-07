@@ -3,7 +3,6 @@ import Navigation from "../ui/navigation/Navigation"
 import {cookies} from "next/headers";
 import {createClient} from "@/utils/supabase/server";
 import {defaultAccounts} from "@/app/ui/default";
-import {redirect} from "next/navigation";
 import {checkWordsOfUserUpToDate, getUserData} from "@/app/ui/actions";
 import {isBefore, parseISO} from 'date-fns';
 
@@ -26,7 +25,14 @@ export default async function DashboardLayout({
         const date = new Date()
         const day_streak = [date, date]
         const wordsets_user = defaultAccounts.wordsets_user
-        const {data, error} = await supabase.from("accounts").insert([{id, name, score, progress, day_streak, wordsets_user}]);
+        const {data, error} = await supabase.from("accounts").insert([{
+            id,
+            name,
+            score,
+            progress,
+            day_streak,
+            wordsets_user
+        }]);
     }
     await checkWordsOfUserUpToDate()
     const account = await getUserData()
@@ -51,15 +57,21 @@ export default async function DashboardLayout({
 
             console.log("Day streak reset.");
         }
-        const {data: accounts, error} = await supabase.from("accounts").update({day_streak: savedDates}).eq("id", user?.id)
+        const {
+            data: accounts,
+            error
+        } = await supabase.from("accounts").update({day_streak: savedDates}).eq("id", user?.id)
     }
 
-    return user ? (
+    return (
         <section className={"flex selection:bg-lightBackground"}>
             {/* Include shared UI here e.g. a header or sidebar */}
-            <Navigation/>
+            <div className={`w-[350px] bg-black relative`}>
+                <Navigation/>
+            </div>
+
 
             <section className={"w-full h-full"}>{children}</section>
         </section>
-    ) : redirect("/login")
+    )
 }

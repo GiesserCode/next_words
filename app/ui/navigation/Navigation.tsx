@@ -6,8 +6,8 @@ import {SignOut} from "@/app/ui/actions";
 
 const Navigation = () => {
     const pathname = usePathname()
-    return (<nav className={"relative w-[350px] min-h-screen bg-darkBackground"}>
-        <div className={"relative h-[98%] w-[calc(100% - 40px)] mx-5"}>
+    return (<nav className={"fixed w-[300px] min-h-screen bg-darkBackground"}>
+        <div className={"relative h-screen w-[calc(100% - 40px)] mx-5"}>
             <h1 className={"my-5 text-5xl tracking-tight"}>Words</h1>
             <div className={"flex flex-col gap-5"}>
                 {buttons.map((item, index) => (

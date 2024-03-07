@@ -6,12 +6,12 @@ import {unstable_noStore as noStore} from 'next/cache';
 import {redirect} from "next/navigation";
 import * as puppeteer from 'puppeteer';
 
-const cookieStore = cookies();
-const supabase = createClient(cookieStore);
 
 let User:any = initUser()
 
 async function initUser(){
+    const cookieStore = cookies();
+    const supabase = createClient(cookieStore);
     const { data: { user } } = await supabase.auth.getUser();
     return user
 }
@@ -25,12 +25,14 @@ export async function getUser(){
 }
 
 export async function getUserData() {
+    const cookieStore = cookies();
+    const supabase = createClient(cookieStore);
     noStore()
     const user = await getUser()
     const {data: accounts, error} = await supabase.from("accounts").select("*").eq("id", user?.id);
     if (accounts){
         return accounts
-    } else {
+    } else{
         redirect("/login")
     }
 }
@@ -45,7 +47,8 @@ export const generateUUID = () => {
 };
 
 export async function getScoreboardData() {
-    const user = await getUser()
+    const cookieStore = cookies();
+    const supabase = createClient(cookieStore);
     const {data: accounts, error} = await supabase
 
         .from('accounts')
@@ -57,6 +60,8 @@ export async function getScoreboardData() {
 }
 
 export async function getWordsetsData(accounts: any){
+    const cookieStore = cookies();
+    const supabase = createClient(cookieStore);
     noStore()
     const wordsdata = await Promise.all(
         accounts![0].wordsets_user.map(async (item: any) => {
@@ -94,7 +99,8 @@ export async function handleSubmit(formData: FormData) {
     const {note} = validatedFields.data
 
     const user = await getUser();
-
+    const cookieStore = cookies();
+    const supabase = createClient(cookieStore);
     if (note !== "") {
         const {data, error} = await supabase
             .from("accounts")
@@ -108,6 +114,8 @@ export async function handleSubmit(formData: FormData) {
 }
 
 export async function fetchFilteredWordsets(query: any, accounts: any) {
+    const cookieStore = cookies();
+    const supabase = createClient(cookieStore);
     try {
         const wordsdata = await Promise.all(
             accounts![0].wordsets_user.map(async (item: any) => {
@@ -150,6 +158,8 @@ export async function addNewUserWordset(formData: FormData) {
         if (!currentWordsets.some((word: any) => word.id === wordsetId)){
 
         //get Wordset you want to add
+            const cookieStore = cookies();
+            const supabase = createClient(cookieStore);
         const { data, error: wordsetError } = await supabase
             .from("wordsets")
             .select("*")
@@ -207,7 +217,8 @@ export async function deleteUserWordset(formData: FormData){
     const currentWordsets = accounts![0].wordsets_user
     const user = await getUser()
 
-
+    const cookieStore = cookies();
+    const supabase = createClient(cookieStore);
     const newWordsets = currentWordsets.filter((wordset: any) => wordset.id !== wordsetId)
     const {data: wordsets,  error} = await supabase
         .from("accounts")
@@ -253,12 +264,15 @@ export async function createNewLearningSet(formData: FormData, words: any, query
     console.log("editId: " + editId)
 
     const user = await getUser()
-
+    const cookieStore = cookies();
+    const supabase = createClient(cookieStore);
     const {data: wordsets, error} = await supabase
         .from("wordsets")
         .select("id")
         .eq("id", id)
-
+    if(error){
+        console.log(error)
+    }
     console.log(wordsets)
 
     if (wordsets![0]){
@@ -321,6 +335,8 @@ export async function createNewLearningSet(formData: FormData, words: any, query
 }
 
 export async function getWordsetbyId(id: any){
+    const cookieStore = cookies();
+    const supabase = createClient(cookieStore);
     noStore()
     if (id){
         const {data: wordsets, error} = await supabase
@@ -341,7 +357,8 @@ export async function setStar(wordset: any, wordId: any){
     }));
 
     const user = await getUser()
-
+    const cookieStore = cookies();
+    const supabase = createClient(cookieStore);
     const {data: accounts, error} = await supabase
         .from("accounts")
         .update({wordsets_user: updatedData})
@@ -372,7 +389,8 @@ export async function checkWordsOfUserUpToDate(){
             return { id: wordset.id, words: transformedWords };
         }));
 
-
+        const cookieStore = cookies();
+        const supabase = createClient(cookieStore);
         const {data: account, error} = await supabase
                 .from("accounts")
                 .update({wordsets_user: newUserWordsets})

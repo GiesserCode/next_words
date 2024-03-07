@@ -24,11 +24,12 @@ export default async function Login({
         });
 
         if (error) {
-            //idk what to do
+            console.log(error)
         }
 
         const { data: { user } } = await supabase.auth.getUser();
         await setUser(user)
+        console.log(user)
 
         return redirect("/dashboard");
     };

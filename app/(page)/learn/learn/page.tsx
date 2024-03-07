@@ -15,7 +15,7 @@ const Learnlearn = async ({searchParams,}: { searchParams?: { query?: string; };
             <BackSVG />
             Back
         </Link>
-        <WriteInput userWordset={userWordset.words} officialWordset={wordsetData[0].words} />
+        <WriteInput userWordset={userWordset.words} officialWordset={wordsetData[0].words} id={query} />
     </section>
 }
 
